@@ -1,8 +1,9 @@
 ﻿#Config Variables
 $PSEmailServer = "localhost"
+#Insecure so keep messaging to an internal network
 $Domain = "localhost"
-$FromId = "power_scan@$Domain"
-$ToId = "rlscott@$Domain"
+$FromId = "power_scan"
+$ToId = "rlscott"
 
 #Set date time to current time
 $Date = Get-Date -Format "dd-mm-yyyy"
@@ -20,7 +21,7 @@ $ScannedItems | ForEach-Object -Process {
     $Number = $_.Name -replace '\D+(\d+).pdf', '$1'
     $Subject = "Attach ISSUE=545-$Number"
     $Body = "Scanned build sheets batch uploaded at $DateTime"
-    $_ | Send-MailMessage -From $FromId -To $ToId -Subject $Subject -Body $Body
+    $_ | Send-MailMessage -From "$FromId@$Domain" -To "$ToId@$Domain" -Subject $Subject -Body $Body
 }
 
 $ScannedItems | Remove-Item
