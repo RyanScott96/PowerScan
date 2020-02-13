@@ -1,5 +1,6 @@
 ﻿#Config Variables
 $PSEmailServer = "localhost"
+$Path = "./tests"
 #Insecure so keep messaging to an internal network
 $Domain = "localhost"
 $FromId = "power_scan"
@@ -11,7 +12,7 @@ $Time = Get-Date -Format "HH:mm:ss"
 $DateTime = "$Date|$Time"
 
 #Find all .pdfs that follow the format build#.pdf in the $PATH
-$ScannedItems = Get-ChildItem -Path ./tests | Where-Object -Property Name -Match "build\d+.pdf"
+$ScannedItems = Get-ChildItem -Path $Path | Where-Object -Property Name -Match ".*\d+.*.pdf"
 
 #For each .pdf create an email with the # as the ISSUE NUMBER
 #and .pdf file as the attachment
@@ -24,4 +25,5 @@ $ScannedItems | ForEach-Object -Process {
     $_ | Send-MailMessage -From "$FromId@$Domain" -To "$ToId@$Domain" -Subject $Subject -Body $Body
 }
 
+#Delete the .pdfs
 $ScannedItems | Remove-Item
